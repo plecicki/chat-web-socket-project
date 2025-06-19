@@ -17,6 +17,7 @@ const login = (event) => {
     userName = userNameInput.value;
     loginForm.classList.remove('show');
     messagesSection.classList.add('show');
+    socket.emit('login', userName );
   }
 }
 

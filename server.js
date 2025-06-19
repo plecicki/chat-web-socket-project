@@ -5,6 +5,7 @@ const socket = require('socket.io');
 const app = express();
 
 const messages = [];
+const users = [];
 
 app.use(express.static(path.join(__dirname, '/client')));
 
@@ -25,6 +26,24 @@ io.on('connection', (socket) => {
     messages.push(message);
     socket.broadcast.emit('message', message);
   });
-  socket.on('disconnect', () => { console.log('Oh, socket ' + socket.id + ' has left') });
+  socket.on('login', (login) => {
+    console.log('User logged in with id: ' + socket.id);
+    users.push({ name: login, id: socket.id });
+    socket.broadcast.emit('message', {
+      author: 'Chat Bot',
+      content: `<i>${login} has joined the conversation!</i>`
+    });
+  });
+  socket.on('disconnect', () => {
+    console.log('Oh, socket ' + socket.id + ' has left');
+    const usersArrayIndex = users.findIndex((i) => {
+      return i.id === socket.id;
+    })
+    socket.broadcast.emit('message', {
+      author: 'Chat Bot',
+      content: `<i>${users[usersArrayIndex].name} has left the conversation... :(</i>`
+    });
+    users.splice(usersArrayIndex, 1);
+  });
   console.log('I\'ve added a listener on message and disconnect events \n');
 });
