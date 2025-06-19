@@ -6,7 +6,8 @@
   "author": "Piotr Lecicki <p.lecicki@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "express": "4.17.1"
+    "express": "4.17.1",
+    "socket.io": "4.7.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
